@@ -3,170 +3,206 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>애니 덕톡 AI</title>
+  <title>애니 덕톡 AI Pro</title>
   <meta name="theme-color" content="#6C5CE7">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Segoe UI", sans-serif; }
-    body { background-color: #0f0f17; color: #f1f1f5; display: flex; flex-direction: column; height: 100dvh; }
+    body { background-color: #0d0d14; color: #f1f1f5; display: flex; flex-direction: column; height: 100dvh; }
     
     header { 
-      background: linear-gradient(135deg, #1e1e2f, #2a2440); 
-      padding: 16px; text-align: center; font-weight: 800; font-size: 18px; 
-      border-bottom: 1px solid #2e2e42; box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      background: linear-gradient(135deg, #1b1b2b, #2c2247); 
+      padding: 15px 16px; display: flex; justify-content: space-between; align-items: center;
+      border-bottom: 1px solid #2e2e45; box-shadow: 0 2px 12px rgba(0,0,0,0.4);
     }
-    header span { font-size: 12px; display: block; color: #a29bfe; font-weight: 500; margin-top: 2px; }
+    .header-title { font-weight: 800; font-size: 17px; }
+    .header-title span { font-size: 11.5px; display: block; color: #a29bfe; font-weight: 500; margin-top: 2px; }
+    .reset-btn { background: #26263b; color: #b8b8d4; border: 1px solid #3a3a58; padding: 6px 11px; border-radius: 12px; font-size: 12px; cursor: pointer; }
 
     #chat-box { flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
     
-    .msg { max-width: 86%; padding: 13px 16px; border-radius: 18px; line-height: 1.55; font-size: 14.5px; word-break: keep-all; animation: fadeIn 0.25s ease; }
+    .msg { max-width: 86%; padding: 13px 16px; border-radius: 18px; line-height: 1.6; font-size: 14.5px; word-break: keep-all; animation: fadeIn 0.25s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
     
     .user { background-color: #6C5CE7; color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
-    .ai { background-color: #1e1e2d; color: #e6e6f0; align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid #2d2d44; }
+    .ai { background-color: #1a1a28; color: #eaeaf5; align-self: flex-start; border-bottom-left-radius: 4px; border: 1px solid #2d2d46; }
     
     .anime-card {
-      background-color: #141420; border: 1px solid #32324e; border-radius: 12px;
-      padding: 12px; margin-top: 10px; display: flex; gap: 12px; align-items: flex-start;
+      background-color: #12121d; border: 1px solid #363654; border-radius: 12px;
+      padding: 11px; margin-top: 12px; display: flex; gap: 12px; align-items: flex-start;
     }
-    .anime-card img { width: 72px; height: 102px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
-    .anime-info h4 { font-size: 15px; color: #a29bfe; margin-bottom: 4px; }
-    .anime-meta { font-size: 12px; color: #9999b3; margin-bottom: 6px; }
+    .anime-card img { width: 68px; height: 96px; object-fit: cover; border-radius: 8px; flex-shrink: 0; }
+    .anime-info h4 { font-size: 14.5px; color: #a29bfe; margin-bottom: 4px; }
+    .anime-meta { font-size: 11.5px; color: #9999b3; margin-bottom: 6px; }
     .anime-tags { display: flex; flex-wrap: wrap; gap: 4px; }
-    .tag { background-color: #28283e; color: #c4c4dc; font-size: 11px; padding: 2px 7px; border-radius: 6px; }
+    .tag { background-color: #25253a; color: #c4c4dc; font-size: 10.5px; padding: 2px 7px; border-radius: 6px; }
 
-    .chips { display: flex; gap: 6px; overflow-x: auto; padding: 8px 12px; background-color: #141420; border-top: 1px solid #242436; }
+    .chips { display: flex; gap: 6px; overflow-x: auto; padding: 8px 12px; background-color: #12121c; border-top: 1px solid #222234; }
     .chips::-webkit-scrollbar { display: none; }
-    .chip { background-color: #252538; color: #d0d0e5; border: 1px solid #383854; padding: 6px 12px; border-radius: 16px; font-size: 12.5px; white-space: nowrap; cursor: pointer; }
+    .chip { background-color: #222236; color: #d0d0e5; border: 1px solid #353552; padding: 6px 12px; border-radius: 16px; font-size: 12px; white-space: nowrap; cursor: pointer; }
     
-    #input-area { display: flex; padding: 10px 12px; background-color: #1a1a28; border-top: 1px solid #2d2d42; gap: 8px; padding-bottom: env(safe-area-inset-bottom, 12px); }
-    input { flex: 1; background-color: #26263a; border: 1px solid #383854; border-radius: 22px; padding: 12px 16px; color: white; font-size: 14.5px; outline: none; }
+    #input-area { display: flex; padding: 10px 12px; background-color: #181826; border-top: 1px solid #2b2b40; gap: 8px; padding-bottom: env(safe-area-inset-bottom, 12px); }
+    input { flex: 1; background-color: #242438; border: 1px solid #383854; border-radius: 22px; padding: 12px 16px; color: white; font-size: 14.5px; outline: none; }
     input:focus { border-color: #6C5CE7; }
-    button { background-color: #6C5CE7; color: white; border: none; border-radius: 22px; padding: 0 18px; font-weight: bold; font-size: 14.5px; cursor: pointer; }
+    #send-btn { background-color: #6C5CE7; color: white; border: none; border-radius: 22px; padding: 0 18px; font-weight: bold; font-size: 14.5px; cursor: pointer; }
+    #send-btn:disabled { background-color: #3f3b6c; cursor: not-allowed; }
   </style>
 </head>
 <body>
 
 <header>
-  🎬 애니 덕톡 AI
-  <span>AniList 실시간 데이터 기반 감상 대화 & 추천</span>
+  <div class="header-title">
+    🎬 애니 덕톡 AI Pro
+    <span>진짜 AI 대화 엔진 + AniList 실시간 연동</span>
+  </div>
+  <button class="reset-btn" onclick="resetChat()">대화 초기화</button>
 </header>
 
 <div id="chat-box">
   <div class="msg ai">
-    반가워! 방금 본 애니 감상 후기를 들려주거나, 요즘 끌리는 분위기를 말해줘.<br><br>
-    예를 들면 <b>"주술회전 봤는데 액션이랑 다크한 분위기가 너무 좋았어"</b> 또는 <b>"여운 남는 성장물 보고 싶어"</b>처럼 편하게 대화해 보자!
+    업그레이드 완료! 이제 네가 본 애니 제목, 명장면, 캐릭터 이야기까지 진짜 친구처럼 다 알아듣고 대화할 수 있어. 😎<br><br>
+    방금 본 애니 후기나 요즘 땡기는 분위기 아무거나 편하게 말해봐!
   </div>
 </div>
 
 <div class="chips">
-  <div class="chip" onclick="quickSend('방금 액션 판타지 봤는데 연출 미쳤더라! 비슷한 거 추천해줘')">🔥 액션 판타지 후기</div>
-  <div class="chip" onclick="quickSend('새벽에 보고 펑펑 울었어... 여운 길게 남는 감동 애니 있을까?')">💧 감동/눈물 후기</div>
-  <div class="chip" onclick="quickSend('머리 비우고 웃으면서 볼 수 있는 일상 개그물 땡긴다')">😂 힐링/개그 대화</div>
-  <div class="chip" onclick="quickSend('반전 소름돋는 추리 스릴러 애니 얘기해줘')">🕵️ 반전/스릴러</div>
+  <div class="chip" onclick="quickSend('방금 장송의 프리렌 정주행 끝냈는데 여운이 너무 깊어...')">🪄 프리렌 감상 후기</div>
+  <div class="chip" onclick="quickSend('주술회전처럼 전투 연출 지리고 다크한 애니 추천해줘')">🔥 다크 액션 추천</div>
+  <div class="chip" onclick="quickSend('요즘 현생이 좀 지치는데 마음 따뜻해지는 힐링 애니 있을까?')">🌿 힐링물 수다</div>
+  <div class="chip" onclick="quickSend('너 최애 애니는 뭐야? 취향 좀 들어보자')">💬 AI 취향 물어보기</div>
 </div>
 
 <div id="input-area">
-  <input type="text" id="user-input" placeholder="감상 후기나 보고 싶은 분위기를 말해줘..." onkeypress="if(event.key==='Enter') sendMessage()">
-  <button onclick="sendMessage()">전송</button>
+  <input type="text" id="user-input" placeholder="감상 후기, 캐릭터 얘기, 추천 요청 뭐든 입력..." onkeypress="if(event.key==='Enter') sendMessage()">
+  <button id="send-btn" onclick="sendMessage()">전송</button>
 </div>
 
 <script>
   const chatBox = document.getElementById('chat-box');
   const input = document.getElementById('user-input');
+  const sendBtn = document.getElementById('send-btn');
 
-  // 키워드 분석 매핑 테이블
-  const keywordMap = [
-    { keys: ['액션', '전투', '싸움', '능력', '먼치킨', '주술', '귀멸', '진격'], genre: 'Action', tag: 'Super Power', mood: '박진감 넘치는 액션과 강렬한 카타르시스' },
-    { keys: ['판타지', '이세계', '마법', '모험', '용사', '마왕'], genre: 'Fantasy', tag: 'Magic', mood: '웅장한 세계관과 몰입감 있는 판타지 전개' },
-    { keys: ['감동', '눈물', '슬픈', '여운', '울었', '인생', '성장', '바이올렛', '프리렌'], genre: 'Drama', tag: 'Tragedy', mood: '가슴을 울리는 섬세한 감정선과 깊은 여운' },
-    { keys: ['로맨스', '연애', '사랑', '설레', '달달', '청춘', '순정'], genre: 'Romance', tag: 'School', mood: '두근거리는 감정 교류와 설레는 청춘의 온도' },
-    { keys: ['추리', '반전', '스릴러', '미스터리', '심리', '두뇌', '데스노트'], genre: 'Mystery', tag: 'Psychological', mood: '치밀한 복선 회수와 뒤통수를 치는 반전 매력' },
-    { keys: ['일상', '힐링', '웃긴', '개그', '코미디', '편안', '치유'], genre: 'Slice of Life', tag: 'Comedy', mood: '부담 없이 미소 짓게 만드는 유쾌하고 따뜻한 에너지' },
-    { keys: ['다크', '어두운', '피폐', '잔인', '절망', '복수', '체인소맨'], genre: 'Thriller', tag: 'Gore', mood: '묵직하고 어두운 분위기와 처절한 서사' },
-    { keys: ['스포츠', '열정', '노력', '팀워크', '하이큐', '슬램덩크'], genre: 'Sports', tag: 'Team Sports', mood: '땀과 열정이 폭발하는 짜릿한 승부의 순간' }
+  // AI가 대화 맥락을 기억하도록 대화 기록 저장
+  const systemPrompt = `너는 애니메이션을 정말 사랑하고 깊이 이해하는 센스 있는 '애니 덕후 AI 친구'야.
+규칙:
+1. 반말(친근한 친구 말투)로 자연스럽고 공감 넘치게 대화해. 딱딱한 AI 말투는 절대 쓰지 마.
+2. 사용자가 애니 감상 후기를 말하면 작품의 핵심 매력, 캐릭터, 연출, 감정선에 깊이 공감하며 디테일하게 수다를 떨어줘.
+3. 사용자가 추천을 원하거나 대화 흐름상 비슷한 명작을 소개해주면 좋을 때만, 답변 맨 마지막 줄에 반드시 다음 형식으로 영어 애니 제목 1~2개를 적어줘:
+[ANIME_SEARCH: English Title 1, English Title 2]
+(예: [ANIME_SEARCH: Frieren: Beyond Journey's End, Violet Evergarden])
+단순 잡담이나 후기 공감만 할 때는 태그를 붙이지 마.`;
+
+  let chatHistory = [
+    { role: 'system', content: systemPrompt }
   ];
+
+  function resetChat() {
+    chatHistory = [{ role: 'system', content: systemPrompt }];
+    chatBox.innerHTML = `<div class="msg ai">대화 기억을 깔끔하게 비웠어! 새로 어떤 애니 이야기를 해볼까? 🎬</div>`;
+  }
 
   function quickSend(text) {
     input.value = text;
     sendMessage();
   }
 
-  function analyzeConversation(text) {
-    let matched = keywordMap.filter(item => item.keys.some(k => text.includes(k)));
-    if (matched.length === 0) {
-      matched.push({ genre: 'Adventure', tag: 'Coming of Age', mood: '탄탄한 스토리와 매력적인 캐릭터 서사' });
-    }
-    
-    const isReview = ['봤는데', '봤어', '보고', '후기', '재밌', '미쳤', '울었', '좋았', '최고', '감동'].some(w => text.includes(w));
-    return { primary: matched[0], secondary: matched[1] || matched[0], isReview };
-  }
-
-  async function fetchAniList(genre) {
+  async function fetchAniListByTitle(title) {
     const query = `
-      query ($genre: String) {
-        Page(page: 1, perPage: 6) {
-          media(type: ANIME, genre: $genre, sort: SCORE_DESC) {
-            title { romaji english native }
-            coverImage { large }
-            averageScore
-            seasonYear
-            genres
-            tags { name rank }
-          }
+      query ($search: String) {
+        Media(type: ANIME, search: $search, sort: POPULARITY_DESC) {
+          title { romaji english native }
+          coverImage { large }
+          averageScore
+          seasonYear
+          tags { name rank }
         }
       }
     `;
-    const res = await fetch('https://graphql.anilist.co', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query, variables: { genre } })
-    });
-    const data = await res.json();
-    // 상위 6개 중 랜덤하게 2개 선택해 매번 새로운 대화 느낌 제공
-    const list = data.data.Page.media;
-    return list.sort(() => 0.5 - Math.random()).slice(0, 2);
+    try {
+      const res = await fetch('https://graphql.anilist.co', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query, variables: { search: title.trim() } })
+      });
+      const json = await res.json();
+      return json.data?.Media || null;
+    } catch {
+      return null;
+    }
   }
 
   async function sendMessage() {
     const text = input.value.trim();
-    if (!text) return;
+    if (!text || sendBtn.disabled) return;
 
-    appendMsg(text, 'user');
+    appendMsg(escapeHtml(text), 'user');
     input.value = '';
+    sendBtn.disabled = true;
 
-    const loading = appendMsg('작품의 여운과 취향을 분석하는 중... 🎞️', 'ai');
-    const analysis = analyzeConversation(text);
+    chatHistory.push({ role: 'user', content: text });
+    if (chatHistory.length > 13) {
+      chatHistory = [chatHistory[0], ...chatHistory.slice(-12)];
+    }
+
+    const loading = appendMsg('생각하는 중... 💭', 'ai');
 
     try {
-      const animes = await fetchAniList(analysis.primary.genre);
-      
-      let intro = analysis.isReview 
-        ? `그 감상 포인트 진짜 공감돼! 특히 <b>${analysis.primary.mood}</b>에 강하게 끌렸던 것 같아. 그 여운을 그대로 이어갈 수 있는 작품들을 AniList 평점 상위권에서 골라봤어.`
-        : `지금 네가 찾는 건 <b>${analysis.primary.mood}</b>이 살아있는 작품이구나! 취향에 딱 맞을 만한 명작들을 AniList에서 분석해 봤어.`;
+      // Pollinations 무료 LLM API 호출 (API 키 불필요)
+      const response = await fetch('https://text.pollinations.ai/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: chatHistory,
+          model: 'openai',
+          seed: Math.floor(Math.random() * 10000)
+        })
+      });
 
-      let cardsHtml = animes.map(a => {
-        const title = a.title.english || a.title.romaji;
-        const jpTitle = a.title.native || '';
-        const topTags = a.tags.filter(t => t.rank >= 65).slice(0, 3).map(t => `<span class="tag">#${t.name}</span>`).join('');
-        return `
-          <div class="anime-card">
-            <img src="${a.coverImage.large}" alt="${title}">
-            <div class="anime-info">
-              <h4>${title}</h4>
-              <div class="anime-meta">${jpTitle} · ${a.seasonYear || '방영작'} · ⭐ ${a.averageScore || 85}점</div>
-              <div class="anime-tags">${topTags}</div>
+      if (!response.ok) throw new Error('Server busy');
+      let aiReply = await response.text();
+      chatHistory.push({ role: 'assistant', content: aiReply });
+
+      // [ANIME_SEARCH: ...] 태그 추출 및 AniList 실제 카드 연동
+      let cardsHtml = '';
+      const match = aiReply.match(/\[ANIME_SEARCH:\s*(.*?)\]/i);
+      if (match) {
+        aiReply = aiReply.replace(match[0], '').trim();
+        const titles = match[1].split(',').slice(0, 2);
+        const mediaList = await Promise.all(titles.map(t => fetchAniListByTitle(t)));
+        
+        cardsHtml = mediaList.filter(Boolean).map(a => {
+          const title = a.title.english || a.title.romaji;
+          const jpTitle = a.title.native || '';
+          const topTags = (a.tags || []).filter(t => t.rank >= 65).slice(0, 3).map(t => `<span class="tag">#${t.name}</span>`).join('');
+          return `
+            <div class="anime-card">
+              <img src="${a.coverImage.large}" alt="${title}">
+              <div class="anime-info">
+                <h4>${title}</h4>
+                <div class="anime-meta">${jpTitle} · ${a.seasonYear || '방영작'} · ⭐ ${a.averageScore || 85}점</div>
+                <div class="anime-tags">${topTags}</div>
+              </div>
             </div>
-          </div>
-        `;
-      }).join('');
+          `;
+        }).join('');
+      }
 
-      loading.innerHTML = `${intro}${cardsHtml}<br><span style="font-size:13px; color:#a29bfe;">이 작품들 중에 본 거 있어? 또 다른 느낌이나 감상 포인트가 있으면 계속 이야기해 줘!</span>`;
-    } catch (e) {
-      loading.textContent = '잠시 AniList 서버와 연결이 불안정해. 다시 한 번 말해줄래?';
+      loading.innerHTML = formatText(aiReply) + cardsHtml;
+    } catch (err) {
+      loading.innerHTML = '앗, 지금 무료 AI 서버에 접속자가 몰려서 잠깐 버벅였어! 😅 방금 한 말 한 번만 다시 보내줄래?';
+    } finally {
+      sendBtn.disabled = false;
+      chatBox.scrollTop = chatBox.scrollHeight;
     }
-    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
+  }
+
+  function formatText(str) {
+    return escapeHtml(str).replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>');
   }
 
   function appendMsg(html, sender) {
